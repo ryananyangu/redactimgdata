@@ -252,6 +252,6 @@ We will finally have a function `showOutput` to capture the processed file and s
 
 A sample of the UI is as below:
 
-![UI](https://res.cloudinary.com/dogjmmett/image/upload/v1652802182/UI_hlg6oh.png "UI")
+![UI](https://res.cloudinary.com/dogjmmett/image/upload/v1652803591/UI_jk4bmj.png "UI")
 
 That's it! Ensure to go through the article to enjoy the experience.
