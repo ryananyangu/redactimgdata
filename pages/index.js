@@ -21,18 +21,7 @@ export default function Home() {
       });
     }
   };
-  const showOutput = async () => {
-    let img;
-
-    await html2canvas(capture.current, {
-      scale: 1,
-      logging: true,
-    }).then((canvas) => {
-      console.log(canvas);
-      img = canvas.toDataURL();
-    });
-    setOutput(img);
-  };
+  
 
   const uploadHandler = (base64) => {
     console.log("uploading to backend...");
@@ -46,7 +35,7 @@ export default function Home() {
         console.log("successfull session", response.status);
         if (response.status === HTTP_SUCCESS) {
           response.text().then((result) => {
-            setCloudinaryResponse(result.replace(extractText, "XXX"));
+            setCloudinaryResponse(result.replaceAll(extractText, "XXX"));
           });
         }
       });
@@ -54,7 +43,18 @@ export default function Home() {
       console.error(error);
     }
   };
+  const showOutput = async () => {
+    let img;
 
+    await html2canvas(capture.current, {
+      scale: 1,
+      logging: true,
+    }).then((canvas) => {
+      console.log(canvas);
+      img = canvas.toDataURL();
+    });
+    setOutput(img);
+  };
   const readFile = (file) => {
     console.log("readFile()=>", file);
     return new Promise(function (resolve, reject) {
