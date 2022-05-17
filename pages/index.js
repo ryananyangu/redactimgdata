@@ -1,5 +1,5 @@
 import html2canvas from "html2canvas";
-import React, { useState, useRef } from "react";
+import React, { useState, createRef } from "react";
 
 const HTTP_SUCCESS = 200;
 
@@ -7,38 +7,31 @@ export default function Home() {
   const [extractText, setExtractText] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [cloudinaryResponse, setCloudinaryResponse] = useState("");
-  const [extracted, setExtracted] = useState("");
   const [image, setImage] = useState();
-  const outputRef = useRef();
-  const downloadRef = useRef();
+  const [output, setOutput] = useState();
+  const capture = createRef();
 
-  const reduceText = () => {
+  const reduceText = async () => {
     if (selectedFile && extractText) {
-      readFile(selectedFile).then((encoded_file) => {
+      await readFile(selectedFile).then((encoded_file) => {
         setImage(encoded_file);
         uploadVideo(encoded_file);
       });
-      let final = cloudinaryResponse.replace(`/${extractText}/g`, "XXXXX");
-      console.log(cloudinaryResponse);
-      console.log(extractText);
-      console.log(final);
-      setExtracted(final);
     }
   };
-
-  const onDownload = () => {
+  const showOutput = async () => {
     let img;
 
-    html2canvas(outputRef.current, {
+    await html2canvas(capture.current, {
       scale: 1,
       logging: true,
     }).then((canvas) => {
+      console.log(canvas);
       img = canvas.toDataURL();
     });
-
-    downloadRef.current.href = img;
-    downloadRef.current.download = new Date().getTime() + "-extracted.png";
+    setOutput(img);
   };
+
   const uploadVideo = (base64) => {
     console.log("uploading to backend...");
     try {
@@ -50,7 +43,7 @@ export default function Home() {
         console.log("successfull session", response.status);
         if (response.status === HTTP_SUCCESS) {
           response.text().then((result) => {
-            setCloudinaryResponse(result);
+            setCloudinaryResponse(result.replace(extractText, "XXX"));
           });
         }
       });
@@ -91,17 +84,12 @@ export default function Home() {
             value={extractText}
           />
           <img src={image} />
+          <button onClick={reduceText}>Reduce text</button>
         </>
       )}
-
-      {extractText && <button onClick={reduceText}>Reduce text</button>}
-      {cloudinaryResponse && (
-        <>
-          {extracted && <div ref={outputRef}>{extracted}</div>}
-          <button onClick={onDownload}>Download Image</button>
-          <a ref={downloadRef}>Extracted link</a>
-        </>
-      )}
+      {output && <img src={output} />}
+      {cloudinaryResponse && <div ref={capture}>{cloudinaryResponse}</div>}
+      <button onClick={showOutput}>Show output</button>
     </div>
   );
 }
