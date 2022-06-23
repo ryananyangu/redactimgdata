@@ -33,7 +33,7 @@ In your project dependencies `npm install Cloudinary
 
 Create a new file named `.env.local` in your root directory and paste the following 
 
-```
+```js
 ".env.local"
 
 
@@ -47,7 +47,7 @@ CLOUDINARY_API_SECRET =
 
 Create a new directory named `pages/api/upload.js` and begin by configuring the environment keys and libraries.
 
-```
+```js
 var cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
@@ -59,7 +59,7 @@ cloudinary.config({
 
 Use the Nextjs backend handler function to execute the post request, upload the media file to Cloudinary and decode the texts inside it. The texts will be sent back to the front end as a response to be redacted.
 
-```
+```js
 export default async function handler(req, res) {
   if (req.method === "POST") {
     // console.log("bakend begins...");
@@ -103,7 +103,7 @@ Include html2canvas in your dependencies. We will use it as we move on:
 `npm install html2canvas`
 
 In your `pages/index` directory, include the following imports:
-```
+```js
 "pages/index"
 
 
@@ -119,7 +119,7 @@ Notice the variable `HTTP_SUCCESS`. We wil use iit to determine our successfull 
 
 Declare the following react hooks:
 
-```
+```js
 "pages/index"
 
 
@@ -134,7 +134,7 @@ Declare the following react hooks:
 ```
 Before we continue, fill the return statement with the following. You can get the css files in the Github repo
 
-```
+```js
 "pages/index"
 
 
@@ -180,7 +180,7 @@ return (
 When a user first experiences the UI. They will be required to select a scanned document from their local repository.
 Create a function `reduceText` that will use a file reader to convert the user's selected media file to base64 and save the encoded image format to the `image` state hook as well as pass it to the `uploadHandler` function.
 
-```
+```js
  const readFile = (file) => {
     console.log("readFile()=>", file);
     return new Promise(function (resolve, reject) {
@@ -210,7 +210,7 @@ Create a function `reduceText` that will use a file reader to convert the user's
 ```
 The `uploadHandler` function will upload the encoded fill to Cloudinary and use the `HTTP_SUCCESS` variable created earlier to determine a successful response to receive the image file's encoded texts from the backend. The user will be allowed to specify which words to redact so that they all be replaced with the string `XXX` using `replaceAll()` method. The texts will be assigned to the `cloudinaryResponse` state hook and will also be visible to the user once this is done.
 
-```
+```js
 const uploadHandler = (base64) => {
     console.log("uploading to backend...");
     setResult(true)
@@ -235,7 +235,7 @@ const uploadHandler = (base64) => {
 
 We will finally have a function `showOutput` to capture the processed file and show it to the user.
 
-```
+```js
   const showOutput = async () => {
     let img;
 
